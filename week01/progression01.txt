@@ -1,0 +1,66 @@
+//โจทย์เเรก โดยอาจารย์จิง 
+function longestWord(sentence) {
+  if (typeof sentence !== 'string') return "";
+  const words = sentence.match(/\b[\w-]+\b/g);
+
+  if (!words) return "";
+
+  let longest = "";
+
+  for (let word of words) {
+    if (word.length > longest.length) {
+      longest = word;
+    }
+  }
+
+  return longest;
+}
+
+module.exports = longestWord;
+
+
+//2-10 by Chatgpt generate โจทย์มาซ้อม
+
+//2. Count vowel
+function countVowels(text) {
+  if (typeof text !== 'string') return 0;
+  const matches = text.match(/[aeiou]/gi);
+  return matches ? matches.length : 0;
+}
+
+module.exports = countVowels;
+
+3. (isPalindrome)
+function isPalindrome(str) {
+  if (typeof str !== 'string') return false;
+  const cleaned = str.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return cleaned === cleaned.split('').reverse().join('');
+}
+
+module.exports = isPalindrome;
+
+4. (capitalizeWords)
+function capitalizeWords(sentence) {
+  if (typeof sentence !== 'string') return '';
+  return sentence.replace(/\b\w/g, char => char.toUpperCase());
+}
+
+module.exports = capitalizeWords;
+
+5. (sumNumbersInText)
+function sumNumbersInText(text) {
+  if (typeof text !== 'string') return 0;
+  const numbers = text.match(/\d+/g);
+  return numbers ? numbers.reduce((sum, n) => sum + parseInt(n), 0) : 0;
+}
+
+module.exports = sumNumbersInText;
+
+6. (countWords)
+function countWords(sentence) {
+  if (typeof sentence !== 'string') return 0;
+  const words = sentence.match(/\b\w+\b/g);
+  return words ? words.length : 0;
+}
+
+module.exports = countWords;
