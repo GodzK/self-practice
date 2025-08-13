@@ -11,7 +11,7 @@ function deepEqual(objA, objB) {
   }
   const keysA = Object.keys(objA);
   const keysB = Object.keys(objB);
-  // จำนวน key ต้องเท่ากัน
+  // จำนวน key ต้องเท่ากัน 
   if (keysA.length !== keysB.length) return false;
 
   // ไล่เช็คทุก key

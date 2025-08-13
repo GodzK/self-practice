@@ -75,3 +75,7 @@ let {id, name} = std1
 
 5. Shallow Equality 
 
+หลักการใน JavaScript
+Primitive type (number, string, boolean, null, undefined, symbol, bigint) → การใช้ === คือการ เทียบค่าจริงๆ เลย เพราะมันไม่มี reference memory
+
+Object type (object, array, function, date, regex) → การใช้ === คือการ เทียบ reference memory ว่าเป็น object เดียวกันหรือไม่
