@@ -1,0 +1,77 @@
+Weys to create a Javascript object
+1. Object literal = concise and easy to read , repeat the code for create multiple object
+const Person = {
+  firstName = "Phakaphol";
+  lastName = "Dherachaisuphakij";
+  age = 20;
+}
+
+2. Constructor functions = 
+function Person(first, last, age) {
+  this.firstName = first;
+  this.lastName = last;
+  this.age = age;
+}
+
+3. 
+class Person {
+  constructor(first, last, age) {
+  this.firstName = first;
+  this.lastName = last;
+  this.age = age;
+  }
+}
+4. Object Create
+// Constructor function
+function Person(name) {
+  this.name = name;
+}
+
+Person.prototype.sayHi = function() {
+  console.log(`Hi, I'm ${this.name}`);
+};
+
+const alice = new Person('Alice');
+alice.sayHi(); // Hi, I'm Alice
+
+console.log(alice.__proto__ === Person.prototype); // true
+
+//Prototype
+const personProto = {
+  sayHi() {
+    console.log(`Hi, I'm ${this.name}`);
+  }
+};
+
+const bob = Object.create(personProto);
+bob.name = 'Bob';
+bob.sayHi(); // Hi, I'm Bob
+
+console.log(Object.getPrototypeOf(bob) === personProto); // true
+
+
+Json is subset of Javascript object because json not contain object and chane  key to double quote
+
+
+
+way to check objec empty
+obj = {};
+1. JSON.stringify(obj) === '{}'
+2. Object.keys(obj).length === 0
+
+Spread in object literals
+const obj1 = {foo: 'bar' , x : 42}
+const cloneObj = {...obj1}
+const cloneWithReplace = {...obj1,foo:'abc'}
+const mergeObject = {...obj1, ...obj2}
+
+
+destructuring 
+const std1 = {id:1, name:"Phakaphol"}
+
+let {id, name} = std1
+
+
+
+5. Shallow Equality 
+
