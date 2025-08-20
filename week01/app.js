@@ -47,3 +47,6 @@ for (let [index,letter] of f.entries()) {
     
 }
 console.log(value);
+
+// Argument object คล้ายๆ Array
+
