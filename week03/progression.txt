@@ -1,0 +1,1 @@
+รู้ว่า reduce higher order function acc เริ่มด้วย o เป็น default
