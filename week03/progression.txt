@@ -1,1 +1,15 @@
-รู้ว่า reduce higher order function acc เริ่มด้วย o เป็น default
+รู้ว่า reduce higher order function acc เริ่มด้วย ตัวเเรกของมัน เป็น default
+
+ได้เรียนรู้ว่า ถ้า loop ดู ค่า array ใช้.inclues เเต่ถ้าloop
+ได้เรียนรู้ การใช้ SLICE
+
+default มันต้องมีตัวเเปรที่ตรงกับ ตัวรับมัน ไม่ใช่ตั้งอะไรก็ได้
+
+
+array เป็น zero indexถ้าจะเอาตัวสุดท้าย ต้อง -1 ก่อน
+//  * #24 nestedArrayPick(arr)
+//  * รับอาร์เรย์ซ้อน [[a,b],[c,d]] คืน [a,d]
+//  */
+function p24_nestedArrayPick(arr) {
+    return [arr[0][0] , arr[arr.length - 1][arr[arr.length-1].length-1]]
+}
