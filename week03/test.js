@@ -1,5 +1,5 @@
 
- obj = { user: { profile: { id: 10, role: "admin" } } };
-let {profile} =  obj
-    let {id , role} = profile
-    console.log([id , role]); 
+ obj = { id: 10, role: "admin" };
+ arr = [1,23,3,4]
+arr.shift()
+console.log(arr);

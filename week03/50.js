@@ -570,11 +570,17 @@ __wrap("#25 extractMixed", () => {
 //  * สร้างอ็อบเจกต์ใหม่ที่ไม่มี key ที่กำหนด โดยใช้ object rest ในการตัดทิ้ง
 //  * ตัวอย่าง: removeKey({a:1,b:2}, 'a') -> {b:2}
 //  */
-// function p26_removeKey(/* obj, key */) {}
+function p26_removeKey(obj, key) {
+  for(let k in obj){
+    if (k == key ) {
+      delete obj[k]
+    }
+  }return obj
+}
 
-// __wrap("#26 removeKey", () => {
-//   assertDeepEqual(p26_removeKey({ a: 1, b: 2 }, "a"), { b: 2 }, "remove a");
-// });
+__wrap("#26 removeKey", () => {
+  assertDeepEqual(p26_removeKey({ a: 1, b: 2 }, "a"), { b: 2 }, "remove a");
+});
 
 // // -----------------------------------------------------------------------------
 // // 27
@@ -584,11 +590,14 @@ __wrap("#25 extractMixed", () => {
 //  * คืนอาร์เรย์ใหม่ที่ตัดสมาชิก n ตัวแรกออก
 //  * ตัวอย่าง: dropFirstN([1,2,3,4,5],3) -> [4,5]
 //  */
-// function p27_dropFirstN(/* arr, n */) {}
+function p27_dropFirstN( arr, n ) {
+  arr.splice(0,n)
+  return arr
+}
 
-// __wrap("#27 dropFirstN", () => {
-//   assertDeepEqual(p27_dropFirstN([1, 2, 3, 4, 5], 3), [4, 5], "drop3");
-// });
+__wrap("#27 dropFirstN", () => {
+  assertDeepEqual(p27_dropFirstN([1, 2, 3, 4, 5], 3), [4, 5], "drop3");
+});
 
 // // -----------------------------------------------------------------------------
 // // 28
@@ -598,11 +607,13 @@ __wrap("#25 extractMixed", () => {
 //  * คืนอาร์เรย์ใหม่ที่มีสมาชิก n ตัวแรก
 //  * ตัวอย่าง: takeFirstN([1,2,3,4],2) -> [1,2]
 //  */
-// function p28_takeFirstN(/* arr, n */) {}
+function p28_takeFirstN(arr, n ) {
+  return arr.splice(0,n)
+}
 
-// __wrap("#28 takeFirstN", () => {
-//   assertDeepEqual(p28_takeFirstN([1, 2, 3, 4], 2), [1, 2], "take2");
-// });
+__wrap("#28 takeFirstN", () => {
+  assertDeepEqual(p28_takeFirstN([1, 2, 3, 4], 2), [1, 2], "take2");
+});
 
 // // -----------------------------------------------------------------------------
 // // 29
@@ -611,13 +622,19 @@ __wrap("#25 extractMixed", () => {
 //  * #29 mergeUserSettings(defaults, overrides)
 //  * รวมค่าตั้งค่า โดย overrides ทับ defaults แบบ shallow
 //  */
-// function p29_mergeUserSettings(/* defaults, overrides */) {}
+function p29_mergeUserSettings(defaults, overrides ) {
+  for (let key in defaults) {
+    if (overrides[key]) {
+      defaults[key] = overrides[key]
+    }
+  }return defaults
+}
 
-// __wrap("#29 mergeUserSettings", () => {
-//   const d = { theme: "light", size: "md" };
-//   const o = { size: "lg" };
-//   assertDeepEqual(p29_mergeUserSettings(d, o), { theme: "light", size: "lg" }, "merge");
-// });
+__wrap("#29 mergeUserSettings", () => {
+  const d = { theme: "light", size: "md" };
+  const o = { size: "lg" };
+  assertDeepEqual(p29_mergeUserSettings(d, o), { theme: "light", size: "lg" }, "merge");
+});
 
 // // -----------------------------------------------------------------------------
 // // 30
@@ -626,15 +643,23 @@ __wrap("#25 extractMixed", () => {
 //  * #30 arrayToObject(pairs)
 //  * แปลงอาร์เรย์คู่คีย์เป็นอ็อบเจกต์ เช่น [["a",1],["b",2]] -> {a:1,b:2}
 //  */
-// function p30_arrayToObject(/* pairs */) {}
+function p30_arrayToObject(pairs) {
+  const newObj = {}
+  for (let i = 0; i < pairs.length; i++) {
+    const [key , value] = pairs[i];
+    newObj[key] = value
+    
+  }
+  return newObj
+}
 
-// __wrap("#30 arrayToObject", () => {
-//   assertDeepEqual(
-//     p30_arrayToObject([["a", 1], ["b", 2]]),
-//     { a: 1, b: 2 },
-//     "pairs->obj"
-//   );
-// });
+__wrap("#30 arrayToObject", () => {
+  assertDeepEqual(
+    p30_arrayToObject([["a", 1], ["b", 2]]),
+    { a: 1, b: 2 },
+    "pairs->obj"
+  );
+});
 
 // // -----------------------------------------------------------------------------
 // // 31
@@ -643,15 +668,21 @@ __wrap("#25 extractMixed", () => {
 //  * #31 objectToArray(obj)
 //  * แปลงอ็อบเจกต์เป็นอาร์เรย์คู่คีย์ เช่น {a:1,b:2} -> [["a",1],["b",2]]
 //  */
-// function p31_objectToArray(obj ) {}
+function p31_objectToArray(obj ) {
+  const array = []
+  for(let key in obj){
+    array.push([key,obj[key]])
+  }
+  return array
+}
 
-// __wrap("#31 objectToArray", () => {
-//   assertDeepEqual(
-//     p31_objectToArray({ a: 1, b: 2 }),
-//     [["a", 1], ["b", 2]],
-//     "obj->pairs"
-//   );
-// });
+__wrap("#31 objectToArray", () => {
+  assertDeepEqual(
+    p31_objectToArray({ a: 1, b: 2 }),
+    [["a", 1], ["b", 2]],
+    "obj->pairs"
+  );
+});
 
 // // -----------------------------------------------------------------------------
 // // 32
@@ -661,24 +692,38 @@ __wrap("#25 extractMixed", () => {
 //  * รับเมทริกซ์แบบอาร์เรย์ซ้อน [[...],[...]] ดึงแถวแรกแล้วหาผลรวม
 //  * ตัวอย่าง: sumMatrixFirstRow([[1,2,3],[4,5,6]]) -> 6
 //  */
-// function p32_sumMatrixFirstRow(/* matrix */) {}
+function p32_sumMatrixFirstRow(matrix) {
+  return matrix[0].reduce((acc,nums)=>{
+    return acc + nums
+  })
+}
 
-// __wrap("#32 sumMatrixFirstRow", () => {
-//   assertDeepEqual(p32_sumMatrixFirstRow([[1, 2, 3], [4, 5, 6]]), 6, "row1 sum");
-// });
+__wrap("#32 sumMatrixFirstRow", () => {
+  assertDeepEqual(p32_sumMatrixFirstRow([[1, 2, 3], [4, 5, 6]]), 6, "row1 sum");
+});
 
 // // -----------------------------------------------------------------------------
 // // 33
 // // -----------------------------------------------------------------------------
-// /**
-//  * #33 selectEvenIndexElements(...args)
-//  * รับอาร์กิวเมนต์ไม่จำกัดและคืนค่าเฉพาะตัวที่ตำแหน่ง index คู่ [0,2,4,...]
-//  */
-// function p33_selectEvenIndexElements( ...args ) {}
+/**
+ * #33 selectEvenIndexElements(...args)
+ * รับอาร์กิวเมนต์ไม่จำกัดและคืนค่าเฉพาะตัวที่ตำแหน่ง index คู่ [0,2,4,...]
+ */
+function p33_selectEvenIndexElements( ...args ) {
+    const newArr = []
+    for (let i = 0; i < arguments.length; i++) {
+      if (i % 2 === 0) {
+        newArr.push(arguments[i])
+      }
+      
+    }
+    return newArr
+    // god :  return args.filter((_, i) => i % 2 === 0);
+}
 
-// __wrap("#33 selectEvenIndexElements", () => {
-//   assertDeepEqual(p33_selectEvenIndexElements("a", "b", "c", "d", "e"), ["a", "c", "e"], "even idx");
-// });
+__wrap("#33 selectEvenIndexElements", () => {
+  assertDeepEqual(p33_selectEvenIndexElements("a", "b", "c", "d", "e"), ["a", "c", "e"], "even idx");
+});
 
 // // -----------------------------------------------------------------------------
 // // 34
@@ -688,11 +733,13 @@ __wrap("#25 extractMixed", () => {
 //  * ต่อคำทั้งหมดเป็นประโยคเดียวคั่นด้วยช่องว่าง (subject + words)
 //  * ตัวอย่าง: buildSentence("I","love","JS") -> "I love JS"
 //  */
-// function p34_buildSentence(/* subject, ...words */) {}
+function p34_buildSentence(subject, ...words) {
+  return [subject, ...words].join(" ");
+}
 
-// __wrap("#34 buildSentence", () => {
-//   assertDeepEqual(p34_buildSentence("I", "love", "JS"), "I love JS", "sentence");
-// });
+__wrap("#34 buildSentence", () => {
+  assertDeepEqual(p34_buildSentence("I", "love", "JS"), "I love JS", "sentence");
+});
 
 // // -----------------------------------------------------------------------------
 // // 35
@@ -701,11 +748,13 @@ __wrap("#25 extractMixed", () => {
 //  * #35 argsToArray(...args)
 //  * แปลง arguments ทั้งหมดให้เป็นอาร์เรย์ใหม่
 //  */
-// function p35_argsToArray( ...args ) {}
+function p35_argsToArray( ...args ) {
+  return [...args]
+}
 
-// __wrap("#35 argsToArray", () => {
-//   assertDeepEqual(p35_argsToArray(1, "a", true), [1, "a", true], "args arr");
-// });
+__wrap("#35 argsToArray", () => {
+  assertDeepEqual(p35_argsToArray(1, "a", true), [1, "a", true], "args arr");
+});
 
 // // -----------------------------------------------------------------------------
 // // 36
@@ -714,11 +763,18 @@ __wrap("#25 extractMixed", () => {
 //  * #36 zipArrays(a, b)
 //  * จับคู่สมาชิกตำแหน่งเดียวกันเป็นคู่ เช่น [1,2] และ ["a","b"] -> [[1,"a"],[2,"b"]]
 //  */
-// function p36_zipArrays(a, b ) {}
+function p36_zipArrays(a, b ) {
+  const newArr = []
+  let minLength = Math.min(a.length ,b.length)
+  for (let i = 0; i < minLength; i++) {
+      newArr.push([a[i],b[i]])
+  }
+  return newArr
+}
 
-// __wrap("#36 zipArrays", () => {
-//   assertDeepEqual(p36_zipArrays([1, 2], ["a", "b"]), [[1, "a"], [2, "b"]], "zip");
-// });
+__wrap("#36 zipArrays", () => {
+  assertDeepEqual(p36_zipArrays([1, 2], ["a", "b"]), [[1, "a"], [2, "b"]], "zip");
+});
 
 // // -----------------------------------------------------------------------------
 // // 37
@@ -727,11 +783,19 @@ __wrap("#25 extractMixed", () => {
 //  * #37 unzipPairs(pairs)
 //  * ผกกลับจากคู่ เป็นอาร์เรย์ 2 แห่ง: [[a1,a2,...],[b1,b2,...]]
 //  */
-// function p37_unzipPairs(/* pairs */) {}
+function p37_unzipPairs(pairs) {
+  const keys = []
+  const values = []
+  for (let i = 0; i < pairs.length; i++) {
+    keys[i] = pairs[i][0]
+    values[i] = pairs[i][1]
+  }
+  return [keys,values]
+}
 
-// __wrap("#37 unzipPairs", () => {
-//   assertDeepEqual(p37_unzipPairs([[1, "a"], [2, "b"]]), [[1, 2], ["a", "b"]], "unzip");
-// });
+__wrap("#37 unzipPairs", () => {
+  assertDeepEqual(p37_unzipPairs([[1, "a"], [2, "b"]]), [[1, 2], ["a", "b"]], "unzip");
+});
 
 // // -----------------------------------------------------------------------------
 // // 38
@@ -740,11 +804,26 @@ __wrap("#25 extractMixed", () => {
 //  * #38 pickTopTwoNumbers(...nums)
 //  * คืนเลขมากสุดสองจำนวนเป็นอาร์เรย์ [max1, max2]
 //  */
-// function p38_pickTopTwoNumbers(...nums ) {}
+function p38_pickTopTwoNumbers(...nums ) {
+  let top = arguments[0]
+  let second = null
+  let temp = null
+  for (let i = 0; i < arguments.length; i++) {
+    if (arguments[i] > second) {
+      second = arguments[i]
+      if (arguments[i] > top) {
+        temp = top
+        top = arguments[i]
+        second = temp
+      }
+    }
+  }
+  return [top,second]
+}
 
-// __wrap("#38 pickTopTwoNumbers", () => {
-//   assertDeepEqual(p38_pickTopTwoNumbers(5, 1, 9, 7), [9, 7], "top2");
-// });
+__wrap("#38 pickTopTwoNumbers", () => {
+  assertDeepEqual(p38_pickTopTwoNumbers(5, 1, 9, 7), [9, 7], "top2");
+});
 
 // // -----------------------------------------------------------------------------
 // // 39
@@ -753,11 +832,21 @@ __wrap("#25 extractMixed", () => {
 //  * #39 mergeAndSortArrays(...arrays)
 //  * รวมทุกอาร์เรย์แล้วเรียงจากน้อยไปมาก คืนอาร์เรย์ใหม่
 //  */
-// function p39_mergeAndSortArrays(/* ...arrays */) {}
+function p39_mergeAndSortArrays(...arrays) {
+  let mergeSortedArray = []
+  let countAllNums = 0
+  for (let i = 0; i < arrays.length; i++) {
+    for (let j = 0; j < arrays[i].length; j++) {
+      countAllNums += 1
+      
+    } 
+  }
 
-// __wrap("#39 mergeAndSortArrays", () => {
-//   assertDeepEqual(p39_mergeAndSortArrays([3, 1], [4, 2]), [1, 2, 3, 4], "sort");
-// });
+}
+
+__wrap("#39 mergeAndSortArrays", () => {
+  assertDeepEqual(p39_mergeAndSortArrays([3, 1], [4, 2]), [1, 2, 3, 4], "sort");
+});
 
 // // -----------------------------------------------------------------------------
 // // 40
