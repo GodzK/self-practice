@@ -519,6 +519,8 @@ function p23_nestedObjectPick(obj) {
     let {user} =  obj
     let {profile} = user
     let {id , role} = profile
+    //fast way นะจ๊ะ
+    // const { user: { profile: { id, role } } } = obj;
     return [id , role]
 }
 
