@@ -833,15 +833,21 @@ __wrap("#38 pickTopTwoNumbers", () => {
 //  * รวมทุกอาร์เรย์แล้วเรียงจากน้อยไปมาก คืนอาร์เรย์ใหม่
 //  */
 function p39_mergeAndSortArrays(...arrays) {
-  let mergeSortedArray = []
-  let countAllNums = 0
-  for (let i = 0; i < arrays.length; i++) {
-    for (let j = 0; j < arrays[i].length; j++) {
-      countAllNums += 1
-      
-    } 
+  let temp ;
+  let merge = []
+  for (let arr of arrays) {
+      merge.push(...arr)
   }
-
+  for (let i = 0; i < merge.length; i++) {
+    for (let k = i + 1; k < merge.length; k++) {
+        if (merge[i] > merge[k]) {
+          temp = merge[i]
+          merge[i] = merge[k]
+          merge[k] = temp
+        }
+    }
+  }
+  return merge
 }
 
 __wrap("#39 mergeAndSortArrays", () => {
@@ -855,11 +861,21 @@ __wrap("#39 mergeAndSortArrays", () => {
 //  * #40 uniqueValues(...arrays)
 //  * รวมหลายอาร์เรย์และคืนค่าไม่ซ้ำตามลำดับที่ปรากฏครั้งแรก
 //  */
-// function p40_uniqueValues(/* ...arrays */) {}
+function p40_uniqueValues(...arrays ) {
+  const unique = []
+  for (let i = 0; i < arrays.length; i++) {
+    for (let j = 0; j < arrays[i].length; j++) {
+        if (!unique.includes(arrays[i][j])) {
+          unique.push(arrays[i][j])
+        }
+    }
+  }
+  return unique;
+}
 
-// __wrap("#40 uniqueValues", () => {
-//   assertDeepEqual(p40_uniqueValues([1, 2, 2], [2, 3], [3, 4]), [1, 2, 3, 4], "unique");
-// });
+__wrap("#40 uniqueValues", () => {
+  assertDeepEqual(p40_uniqueValues([1, 2, 2], [2, 3], [3, 4]), [1, 2, 3, 4], "unique");
+});
 
 // // -----------------------------------------------------------------------------
 // // 41
@@ -868,12 +884,19 @@ __wrap("#39 mergeAndSortArrays", () => {
 //  * #41 shallowCompareObjects(a, b)
 //  * เปรียบเทียบแบบตื้น: คีย์และค่า (primitive) เท่ากันหมด -> true
 //  */
-// function p41_shallowCompareObjects(a, b ) {}
+function p41_shallowCompareObjects(a, b ) {
+  for (let key in b) {
+      if (a[key] !== b[key]) {
+        return false
+      }
+  }
+  return true
+}
 
-// __wrap("#41 shallowCompareObjects", () => {
-//   assertDeepEqual(p41_shallowCompareObjects({ x: 1, y: 2 }, { y: 2, x: 1 }), true, "same");
-//   assertDeepEqual(p41_shallowCompareObjects({ x: 1 }, { x: 2 }), false, "diff");
-// });
+__wrap("#41 shallowCompareObjects", () => {
+  assertDeepEqual(p41_shallowCompareObjects({ x: 1, y: 2 }, { y: 2, x: 1 }), true, "same");
+  assertDeepEqual(p41_shallowCompareObjects({ x: 1 }, { x: 2 }), false, "diff");
+});
 
 // // -----------------------------------------------------------------------------
 // // 42
@@ -882,12 +905,17 @@ __wrap("#39 mergeAndSortArrays", () => {
 //  * #42 getLastArg(...args)
 //  * คืนอาร์กิวเมนต์ตัวสุดท้าย หรือ undefined ถ้าไม่มี
 //  */
-// function p42_getLastArg( ...args ) {}
+function p42_getLastArg( ...args ) {
+    if (arguments.length === 0) {
+      return undefined
+    }
+    return arguments[arguments.length - 1]
+}
 
-// __wrap("#42 getLastArg", () => {
-//   assertDeepEqual(p42_getLastArg(1, 2, 3), 3, "last=3");
-//   assertDeepEqual(p42_getLastArg(), undefined, "none");
-// });
+__wrap("#42 getLastArg", () => {
+  assertDeepEqual(p42_getLastArg(1, 2, 3), 3, "last=3");
+  assertDeepEqual(p42_getLastArg(), undefined, "none");
+});
 
 // // -----------------------------------------------------------------------------
 // // 43
@@ -897,18 +925,30 @@ __wrap("#39 mergeAndSortArrays", () => {
 //  * คืนอ็อบเจกต์นับจำนวนชนิดข้อมูลแต่ละประเภทจาก args
 //  * ตัวอย่างผลลัพธ์: { number: 2, string: 1, boolean: 0, object: 1, undefined: 0, function: 0, symbol: 0, bigint: 0 }
 //  */
-// function p43_countTypes( ...args ) {}
+function p43_countTypes( ...args ) {
+  const countType = {}
+  for (let i = 0; i < args.length ; i++) {
+    let type = typeof args[i]
+      if (!(type in countType)) {
+        countType[type] = 1
+      }
+      else{
+        countType[type] ++
+      }
+  }
+  return countType
+}
 
-// __wrap("#43 countTypes", () => {
-//   const f = function () {};
-//   const s = Symbol("x");
-//   const r = p43_countTypes(1, 2, "a", true, { x: 1 }, undefined, f, s, 10n);
-//   assertDeepEqual(
-//     r,
-//     { number: 2, string: 1, boolean: 1, object: 1, undefined: 1, function: 1, symbol: 1, bigint: 1 },
-//     "type counts"
-//   );
-// });
+__wrap("#43 countTypes", () => {
+  const f = function () {};
+  const s = Symbol("x");
+  const r = p43_countTypes(1, 2, "a", true, { x: 1 }, undefined, f, s, 10n);
+  assertDeepEqual(
+    r,
+    { number: 2, string: 1, boolean: 1, object: 1, undefined: 1, function: 1, symbol: 1, bigint: 1 },
+    "type counts"
+  );
+});
 
 // // -----------------------------------------------------------------------------
 // // 44
@@ -917,12 +957,20 @@ __wrap("#39 mergeAndSortArrays", () => {
 //  * #44 mapObject(obj, mapper)
 //  * คืนอ็อบเจกต์ใหม่ที่ map value ด้วยฟังก์ชัน mapper(v, k)
 //  */
-// function p44_mapObject(/* obj, mapper */) {}
+function p44_mapObject(obj, mapper) {
+  let result = {};
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      result[key] = mapper(obj[key], key);
+    }
+  }
+  return result;
+}
 
-// __wrap("#44 mapObject", () => {
-//   const r = p44_mapObject({ a: 1, b: 2 }, (v, k) => v * 10);
-//   assertDeepEqual(r, { a: 10, b: 20 }, "map values");
-// });
+__wrap("#44 mapObject", () => {
+  const r = p44_mapObject({ a: 1, b: 2 }, (v, k) => v * 10);
+  assertDeepEqual(r, { a: 10, b: 20 }, "map values");
+});
 
 // // -----------------------------------------------------------------------------
 // // 45
@@ -931,11 +979,18 @@ __wrap("#39 mergeAndSortArrays", () => {
 //  * #45 excludeKeys(obj, ...keys)
 //  * คืนอ็อบเจกต์ใหม่ที่ตัดคีย์ที่ระบุออก
 //  */
-// function p45_excludeKeys(/* obj, ...keys */) {}
+function p45_excludeKeys(obj, ...keys ) {
+  for (let i in obj) {
+    if(keys.includes(i)){
+      delete obj[i]
+    }
+  }
+  return obj
+}
 
-// __wrap("#45 excludeKeys", () => {
-//   assertDeepEqual(p45_excludeKeys({ a: 1, b: 2, c: 3 }, "b", "c"), { a: 1 }, "exclude");
-// });
+__wrap("#45 excludeKeys", () => {
+  assertDeepEqual(p45_excludeKeys({ a: 1, b: 2, c: 3 }, "b", "c"), { a: 1 }, "exclude");
+});
 
 // // -----------------------------------------------------------------------------
 // // 46
@@ -944,11 +999,17 @@ __wrap("#39 mergeAndSortArrays", () => {
 //  * #46 includeKeys(obj, ...keys)
 //  * คืนอ็อบเจกต์ใหม่ที่มีเฉพาะคีย์ที่ระบุเท่านั้น
 //  */
-// function p46_includeKeys(/* obj, ...keys */) {}
+function p46_includeKeys(obj, ...keys ) {
+  const newObj = {}
+  for (let i = 0; i < keys.length; i++) {
+    newObj[keys[i]] = obj[keys[i]]
+  }
+  return newObj
+}
 
-// __wrap("#46 includeKeys", () => {
-//   assertDeepEqual(p46_includeKeys({ a: 1, b: 2, c: 3 }, "b", "c"), { b: 2, c: 3 }, "include");
-// });
+__wrap("#46 includeKeys", () => {
+  assertDeepEqual(p46_includeKeys({ a: 1, b: 2, c: 3 }, "b", "c"), { b: 2, c: 3 }, "include");
+});
 
 // // -----------------------------------------------------------------------------
 // // 47
@@ -957,13 +1018,20 @@ __wrap("#39 mergeAndSortArrays", () => {
 //  * #47 updateUser(user, updates)
 //  * คืนอ็อบเจกต์ใหม่ที่รวม updates ทับ user (shallow)
 //  */
-// function p47_updateUser(/* user, updates */) {}
+function p47_updateUser(user, updates) {
+   for(let key in updates){
+    if (user[key] !== undefined) {
+      user[key] = updates[key]
+    }
+   }
+   return user
+}
 
-// __wrap("#47 updateUser", () => {
-//   const u = { id: 1, name: "A", age: 20 };
-//   const up = { age: 21 };
-//   assertDeepEqual(p47_updateUser(u, up), { id: 1, name: "A", age: 21 }, "update");
-// });
+__wrap("#47 updateUser", () => {
+  const u = { id: 1, name: "A", age: 20 };
+  const up = { age: 21 };
+  assertDeepEqual(p47_updateUser(u, up), { id: 1, name: "A", age: 21 }, "update");
+});
 
 // // -----------------------------------------------------------------------------
 // // 48
@@ -972,12 +1040,16 @@ __wrap("#39 mergeAndSortArrays", () => {
 //  * #48 pickCity(user)
 //  * รับ { address: { city } } แล้วคืนค่า city
 //  */
-// function p48_pickCity(/* user */) {}
+function p48_pickCity(user ) {
+  const {name , address} = user
+  let {city} = address
+  return city
+}
 
-// __wrap("#48 pickCity", () => {
-//   const u = { name: "B", address: { city: "Bangkok", zip: "10110" } };
-//   assertDeepEqual(p48_pickCity(u), "Bangkok", "city");
-// });
+__wrap("#48 pickCity", () => {
+  const u = { name: "B", address: { city: "Bangkok", zip: "10110" } };
+  assertDeepEqual(p48_pickCity(u), "Bangkok", "city");
+});
 
 // // -----------------------------------------------------------------------------
 // // 49
@@ -987,11 +1059,18 @@ __wrap("#39 mergeAndSortArrays", () => {
 //  * สลับสมาชิกตัวแรกและตัวสุดท้าย คืนอาร์เรย์ใหม่
 //  * ตัวอย่าง: swapFirstAndLast([1,2,3,4]) -> [4,2,3,1]
 //  */
-// function p49_swapFirstAndLast(arr ) {}
+function p49_swapFirstAndLast(arr ) {
+  let first = arr[0]
+  let last = arr[arr.length - 1]
+  let temp = arr[0].value
+  arr[0] = last
+  arr[arr.length - 1] = first
+  return arr
+}
 
-// __wrap("#49 swapFirstAndLast", () => {
-//   assertDeepEqual(p49_swapFirstAndLast([1, 2, 3, 4]), [4, 2, 3, 1], "swap ends");
-// });
+__wrap("#49 swapFirstAndLast", () => {
+  assertDeepEqual(p49_swapFirstAndLast([1, 2, 3, 4]), [4, 2, 3, 1], "swap ends");
+});
 
 // // -----------------------------------------------------------------------------
 // // 50
@@ -1001,13 +1080,20 @@ __wrap("#39 mergeAndSortArrays", () => {
 //  * แตกสตริงเป็นอาร์เรย์ของตัวอักษรด้วย spread
 //  * ตัวอย่าง: spreadStringToArray("สวัสดี") -> ["ส","ว","ั","ส","ด","ี"]
 //  */
-// function p50_spreadStringToArray(/* str */) {}
+function p50_spreadStringToArray(str ) {
+  const strArr = []
+  for (let i = 0; i < str.length; i++) {
+    strArr.push(str[i])
+  }
+  return strArr
+}
 
-// __wrap("#50 spreadStringToArray", () => {
-//   assertDeepEqual(p50_spreadStringToArray("hello"), ["h", "e", "l", "l", "o"], "chars");
-// });
 
-// // -----------------------------------------------------------------------------
-// // Run Summary
-// // -----------------------------------------------------------------------------
-// summary();
+__wrap("#50 spreadStringToArray", () => {
+  assertDeepEqual(p50_spreadStringToArray("hello"), ["h", "e", "l", "l", "o"], "chars");
+});
+
+// -----------------------------------------------------------------------------
+// Run Summary
+// -----------------------------------------------------------------------------
+summary();
